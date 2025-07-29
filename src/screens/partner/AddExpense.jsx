@@ -250,7 +250,7 @@ if (Object.keys(errors).length > 0) return;
         {/* Invoice No */}
         <View style={styles.inputBox}>
           <Text style={styles.label}>INVOICE NO</Text>
-          <TextInput placeholder="" style={styles.input}
+          <TextInput placeholder="Enter Invoice" style={styles.input}
             value={invoice}
             onChangeText={setinvoice}
           />
@@ -281,7 +281,7 @@ if (Object.keys(errors).length > 0) return;
         {/* Amount */}
         <View style={styles.inputBox}>
           <Text style={styles.label}>AMOUNT</Text>
-          <TextInput keyboardType="numeric" style={styles.input}
+          <TextInput keyboardType="numeric" style={styles.input} placeholder='Enter Amount'
             value={amount}
             onChangeText={(text) => {
               const numericText = text.replace(/[^0-9]/g, ''); // allow only numbers

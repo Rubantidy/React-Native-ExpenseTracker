@@ -1,0 +1,22 @@
+import { View, Text } from 'react-native'
+import React from 'react'
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AdminHeader from '../components/admin/AdminHeader';
+import AdminFooter from '../components/admin/AdminFooter';
+import AdminDashboard from '../screens/admin/AdminDashboard';
+import PartnerManagement from '../screens/admin/Profile/PartnerManagement';
+import AddPartnerForm from '../screens/admin/Profile/AddPartnerForm';
+
+const Stack = createNativeStackNavigator();
+ 
+export default function AdminNavigator() {
+  return (
+    <Stack.Navigator initialRouteName='Dashboard' screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='Dashboard' component={AdminDashboard} />
+      <Stack.Screen name='header' component={AdminHeader} />
+      <Stack.Screen name='footer' component={AdminFooter} />
+      <Stack.Screen name='MangePartner' component={PartnerManagement} />
+      <Stack.Screen name='AddPartnerForm' component={AddPartnerForm} />
+    </Stack.Navigator>
+  );
+}

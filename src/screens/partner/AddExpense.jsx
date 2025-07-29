@@ -338,15 +338,15 @@ if (Object.keys(errors).length > 0) return;
         {/* Description */}
         <View style={styles.inputBox}>
           <Text style={styles.label}>DESCRIPTION</Text>
-          <TextInput multiline numberOfLines={2} style={styles.input}
+          <TextInput multiline numberOfLines={2} style={styles.input} placeholder='Enter Description (Optional)'
             value={desc}
             onChangeText={setDesc}
           />
         </View>
 
          <View style={styles.inputBox}>
-          <Text style={styles.label}>GST No</Text>
-          <TextInput placeholder="" style={styles.input}
+          <Text style={styles.label}>GST Number</Text>
+          <TextInput placeholder="Enter GST (Optional)" style={styles.input}
             value={gst}
             onChangeText={setGst}
           />        

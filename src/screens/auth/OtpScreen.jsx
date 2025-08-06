@@ -3,9 +3,9 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 import { Authcontext } from '../../context/Authcontext';
 
 const OtpScreen = ({ route, setUserRole }) => {
-     const [otp, setOtp] = useState('');
-     const { login } = useContext(Authcontext);
-     const { userData } = route.params;
+  const [otp, setOtp] = useState('');
+  const { login } = useContext(Authcontext);
+  const { userData } = route.params;
 
   const handleVerify = () => {
     if (otp === '123456') {
@@ -36,9 +36,33 @@ const OtpScreen = ({ route, setUserRole }) => {
 export default OtpScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 20 },
-  title: { fontSize: 22, fontWeight: 'bold', textAlign: 'center', marginBottom: 30 },
-  input: { borderWidth: 1, borderColor: '#ccc', padding: 12, borderRadius: 8, marginBottom: 20 },
-  button: { backgroundColor: '#3A7AFE', padding: 15, borderRadius: 8 },
-  buttonText: { color: '#fff', textAlign: 'center', fontWeight: 'bold' },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 30
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 20
+  },
+  button: {
+    backgroundColor: '#3A7AFE',
+    padding: 15,
+    borderRadius: 8
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: 'bold'
+  },
 });
+ 

@@ -16,7 +16,7 @@ const AddPartnerForm = () => {
   const [role, setRole] = useState('');
   // const [password, setPassword] = useState('');
   const [formErrors, setFormErrors] = useState({});
-
+ 
 
 
   // const generatePassword = () => {

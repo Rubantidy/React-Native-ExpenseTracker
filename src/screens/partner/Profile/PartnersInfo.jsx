@@ -1,10 +1,11 @@
 import { FlatList, Image, Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { getApp } from '@react-native-firebase/app';
 import { getDatabase, onValue, ref } from '@react-native-firebase/database';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { LoaderContext } from '../../../context/LoaderContext';
 
 const PartnerCard = ({ partner }) => (
   <View style={styles.card}>
@@ -27,58 +28,61 @@ const PartnerCard = ({ partner }) => (
 
 const PartnersInfo = () => {
   const navigation = useNavigation();
-   const [partnerData, setpartnerData] = useState([]);
- 
- 
-   useEffect(() => {
-     const app = getApp();
-     const db = getDatabase(app);
-     const partnerRef = ref(db, '/partners');
- 
-     const unsubscribe = onValue(partnerRef, (snapshot) => {
-       const data = snapshot.val();
-       if (data) {
-         const formattedData = Object.keys(data).map((key, index) => ({
-           id: key,
-           ...data[key],
-         }));
-         setpartnerData(formattedData);
-       } else {
-         setpartnerData([]);
-       }
-     });
-     return () => unsubscribe();
-   }, []);
-   
-   return (
-     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-       <View style={styles.bar}></View>
- 
-       <LinearGradient
-         colors={['#5312A6', '#B51396']}
-         start={{ x: 0, y: 0 }}
-         end={{ x: 1, y: 0 }}
-         style={styles.headerContainer}
-       >
-         <View style={styles.header}>
-           <TouchableOpacity onPress={() => navigation.goBack()}>
-             <Icon name="arrow-left" size={24} color="#fff" />
-           </TouchableOpacity>
-           <Text style={styles.headerText}>Partner's Information</Text>
-           <View style={styles.iconRight}>             
-           </View>
-         </View>
-       </LinearGradient>
- 
-       <FlatList
-         data={partnerData}
-         kkeyExtractor={(item, index) => item?.id?.toString() ?? index.toString()}
-         renderItem={({ item }) => <PartnerCard partner={item} />}
-         contentContainerStyle={{ padding: 10 }}
-       />
-     </View>
-   );
- };
+  const [partnerData, setpartnerData] = useState([]);
+  const { showLoader, hideLoader } = useContext(LoaderContext);
+
+
+  useEffect(() => {
+    const app = getApp();
+    const db = getDatabase(app);
+    const partnerRef = ref(db, '/partners');
+    showLoader();
+
+    const unsubscribe = onValue(partnerRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const formattedData = Object.keys(data).map((key, index) => ({
+          id: key,
+          ...data[key],
+        }));
+        setpartnerData(formattedData);
+      } else {
+        setpartnerData([]);
+      }
+      hideLoader();
+    });
+    return () => unsubscribe();
+  }, []);
+
+  return (
+    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+      <View style={styles.bar}></View>
+
+      <LinearGradient
+        colors={['#5312A6', '#B51396']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={styles.headerContainer}
+      >
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Icon name="arrow-left" size={24} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.headerText}>Partner's Information</Text>
+          <View style={styles.iconRight}>
+          </View>
+        </View>
+      </LinearGradient>
+
+      <FlatList
+        data={partnerData}
+        kkeyExtractor={(item, index) => item?.id?.toString() ?? index.toString()}
+        renderItem={({ item }) => <PartnerCard partner={item} />}
+        contentContainerStyle={{ padding: 10 }}
+      />
+    </View>
+  );
+};
 
 export default PartnersInfo
 

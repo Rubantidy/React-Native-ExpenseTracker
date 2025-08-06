@@ -11,6 +11,7 @@ import {
   PermissionsAndroid,
   Alert,
   Image,
+  ToastAndroid,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -21,7 +22,7 @@ import { getApp } from '@react-native-firebase/app';
 import { get, getDatabase, onValue, push, ref, set } from '@react-native-firebase/database';
 import { Picker } from '@react-native-picker/picker';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import  storage  from '@react-native-firebase/storage';
+import storage from '@react-native-firebase/storage';
 import { LoaderContext } from '../../context/LoaderContext';
 
 
@@ -40,7 +41,7 @@ const AddExpense = () => {
   const [receiptImage, setReceiptImage] = useState(null);
   const [gst, setGst] = useState(null);
 
-   const [formErrors, setFormErrors] = useState({});
+  const [formErrors, setFormErrors] = useState({});
 
 
 
@@ -100,128 +101,129 @@ const AddExpense = () => {
   };
 
   const requestPermissions = async () => {
-  if (Platform.OS === 'android') {
-    try {
-      const granted = await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
-      ]);
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+        ]);
 
-      return (
-        granted['android.permission.READ_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED ||
-        granted['android.permission.READ_MEDIA_IMAGES'] === PermissionsAndroid.RESULTS.GRANTED
-      );
-    } catch (err) {
-      console.warn(err);
-      return false;
+        return (
+          granted['android.permission.READ_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED ||
+          granted['android.permission.READ_MEDIA_IMAGES'] === PermissionsAndroid.RESULTS.GRANTED
+        );
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    } else {
+      return true;
     }
-  } else {
-    return true;
-  }
-};
-
-
-const handleImagePick = async () => {
-  const hasPermission = await requestPermissions();
-  if (!hasPermission) {
-    Alert.alert("Permission denied", "Gallery access is required.");
-    return;
-  }
-
-  launchImageLibrary({ mediaType: 'photo', quality: 0.5 }, (res) => {
-    if (!res.didCancel && !res.errorCode) {
-      setReceiptImage(res.assets[0]);
-    }
-  });
-};
-
-
-const handleSubmit = async () => {
-  showLoader();
-
-let errors = {};
-
-if (!amount || !amount.trim()) errors.amount = 'Amount is Required';
-if (!category || !category.trim()) errors.category = 'Category is Required';
-if (!invoice || !invoice.trim()) errors.invoice = 'Invoice is Required';
-
-setFormErrors(errors);
-
-if (Object.keys(errors).length > 0) return;
-
-
-  const app = getApp();
-  const db = getDatabase(app);
-
-  const lastIdRef = ref(db, 'expenseid/lastid');
-  let newId = 1;
-
-  try{
-    const snapshot = await get(lastIdRef);
-    if(snapshot.exists()) {
-      const lastId = parseInt(snapshot.val(), 10);
-      newId = lastId + 1;
-    }
-  
-  } catch (error) {
-     console.error('Failed to read lastid:', error);
-    Alert.alert('Error reading expense ID');
-    return;
-  }
-
-  const monthsShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const day = date.getDate().toString().padStart(2, '0');
-  const shortMonth = monthsShort[date.getMonth()];
-  const year = date.getFullYear().toString().slice(-2);
-  const formattedDate = `${day}${shortMonth}${year}`;
-
-  const expenseId = `${String(newId).padStart(2, '0')}_${formattedDate}`;
-
-  let imageUrl = '';
-  if(receiptImage?.uri) {
- try {
-  const filename = `${expenseId}_${Date.now()}.jpg`;
-  const storageRef = storage().ref(`receipts/${filename}`);
-
-  await storageRef.putFile(receiptImage.uri);  // 🔁 Only AFTER this, get download URL
-  imageUrl = await storageRef.getDownloadURL();  // ✅ Now the file definitely exists
-} catch (uploadErr) {
-  console.error('Image upload failed:', uploadErr);
-  Alert.alert('Failed to upload receipt image');
-  return;
-}
-  }
-
-  const expenseData ={
-    expenseId,
-    name: user?.name || '',
-    invoice,
-    date: date.toISOString(),
-    amount,
-    category,
-    description: desc || '',
-    gst: gst || '',
-    imageUrl,
-    status: 'Pending',
-    createdAt: new Date().toISOString(),
   };
 
-  const expenseRef = ref(db, `expensedetails/${expenseId}`);
 
-  try{
-    await set(expenseRef, expenseData);
-    await set(lastIdRef, String(newId));
-        Alert.alert('Expense saved successfully!');
-    handleClear();
-  } catch (err) {
-    console.error('Error saving expense:', err);
-    Alert.alert('Failed to save expense');
-  }
-  finally {
-    hideLoader();
-  }
+  const handleImagePick = async () => {
+    const hasPermission = await requestPermissions();
+    if (!hasPermission) {
+      Alert.alert("Permission denied", "Gallery access is required.");
+      return;
+    }
 
-};
+    launchImageLibrary({ mediaType: 'photo', quality: 0.5 }, (res) => {
+      if (!res.didCancel && !res.errorCode) {
+        setReceiptImage(res.assets[0]);
+      }
+    });
+  };
+
+
+  const handleSubmit = async () => {
+
+
+    let errors = {};
+
+    if (!amount || !amount.trim()) errors.amount = 'Amount is Required';
+    if (!category || !category.trim()) errors.category = 'Category is Required';
+    if (!invoice || !invoice.trim()) errors.invoice = 'Invoice is Required';
+
+    setFormErrors(errors);
+
+    if (Object.keys(errors).length > 0) return;
+
+    showLoader();
+    const app = getApp();
+    const db = getDatabase(app);
+
+    const lastIdRef = ref(db, 'expenseid/lastid');
+    let newId = 1;
+
+    try {
+      const snapshot = await get(lastIdRef);
+      if (snapshot.exists()) {
+        const lastId = parseInt(snapshot.val(), 10);
+        newId = lastId + 1;
+      }
+
+    } catch (error) {
+      console.error('Failed to read lastid:', error);
+      Alert.alert('Error reading expense ID');
+      return;
+    }
+
+    const monthsShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const day = date.getDate().toString().padStart(2, '0');
+    const shortMonth = monthsShort[date.getMonth()];
+    const year = date.getFullYear().toString().slice(-2);
+    const formattedDate = `${day}${shortMonth}${year}`;
+
+    const expenseId = `${String(newId).padStart(2, '0')}_${formattedDate}`;
+
+    let imageUrl = '';
+    if (receiptImage?.uri) {
+      try {
+        const filename = `${expenseId}_${Date.now()}.jpg`;
+        const storageRef = storage().ref(`receipts/${filename}`);
+
+        await storageRef.putFile(receiptImage.uri);  // 🔁 Only AFTER this, get download URL
+        imageUrl = await storageRef.getDownloadURL();  // ✅ Now the file definitely exists
+      } catch (uploadErr) {
+        console.error('Image upload failed:', uploadErr);
+        Alert.alert('Failed to upload receipt image');
+        return;
+      }
+    }
+
+    const expenseData = {
+      expenseId,
+      name: user?.name || '',
+      invoice,
+      date: date.toISOString(),
+      amount,
+      category,
+      description: desc || '',
+      gst: gst || '',
+      imageUrl,
+      status: 'Pending',
+      submittedBy: user?.id || '',
+      createdAt: new Date().toISOString(),
+    };
+
+    const expenseRef = ref(db, `expensedetails/${expenseId}`);
+
+    try {
+      await set(expenseRef, expenseData);
+      await set(lastIdRef, String(newId));
+      ToastAndroid.show('Expense Added Successfully!', ToastAndroid.SHORT);
+      handleClear();
+    } catch (err) {
+      console.error('Error saving expense:', err);
+      Alert.alert('Failed to save expense');
+    }
+    finally {
+      hideLoader();
+    }
+
+  };
 
   return (
     <View style={styles.screen}>
@@ -233,10 +235,17 @@ if (Object.keys(errors).length > 0) return;
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name="arrow-left" size={24} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Add Expense</Text>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Icon name="arrow-left" size={24} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.headerText}>Add Expense</Text>
+          <View style={styles.iconRight}>
+            <TouchableOpacity onPress={() => navigation.navigate('AddPartnerExpense')}>
+              <Icon name="account-supervisor" size={30} color="#fff" />
+            </TouchableOpacity>
+          </View>
+        </View>
       </LinearGradient>
 
       <ScrollView contentContainerStyle={styles.formContainer}>
@@ -344,29 +353,29 @@ if (Object.keys(errors).length > 0) return;
           />
         </View>
 
-         <View style={styles.inputBox}>
+        <View style={styles.inputBox}>
           <Text style={styles.label}>GST Number</Text>
           <TextInput placeholder="Enter GST (Optional)" style={styles.input}
             value={gst}
             onChangeText={setGst}
-          />        
+          />
         </View>
 
         {/* Attach File */}
         <View style={[styles.inputBox, { height: 180, justifyContent: 'center', alignItems: 'center' }]}>
-        <Text style={[styles.label, { alignSelf: 'flex-start' }]}>ATTACH FILE</Text>
-        <TouchableOpacity style={styles.attachmentBox} onPress={handleImagePick}>
-          {receiptImage ? (
-            <Image
-              source={{ uri: receiptImage.uri }}
-              style={{ width: 100, height: 100, borderRadius: 10 }}
-              resizeMode="cover"
-            />
-          ) : (
-            <Icon name="plus" size={32} color="#888" />
-          )}
-        </TouchableOpacity>
-      </View>
+          <Text style={[styles.label, { alignSelf: 'flex-start' }]}>ATTACH FILE</Text>
+          <TouchableOpacity style={styles.attachmentBox} onPress={handleImagePick}>
+            {receiptImage ? (
+              <Image
+                source={{ uri: receiptImage.uri }}
+                style={{ width: 100, height: 100, borderRadius: 10 }}
+                resizeMode="cover"
+              />
+            ) : (
+              <Icon name="plus" size={32} color="#888" />
+            )}
+          </TouchableOpacity>
+        </View>
 
 
         <View style={styles.btns}>
@@ -396,16 +405,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   headerContainer: {
+    height: 60,
+    justifyContent: 'center',
+    paddingHorizontal: 15,
+  },
+  header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    paddingTop: 20,
   },
   headerText: {
     color: '#fff',
-    fontSize: 20,
-    marginLeft: 10,
+    fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'center',
+    marginLeft: 10,
+
+  },
+  iconRight: {
+    flex: 1,
+    alignItems: 'flex-end',
   },
   formContainer: {
     padding: 16,
@@ -458,14 +476,14 @@ const styles = StyleSheet.create({
   },
 
   attachmentBox: {
-  width: 110,
-  height: 110,
-  borderWidth: 1.2,
-  borderColor: '#bbb',
-  borderRadius: 10,
-  borderStyle: 'dashed',
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: '#fafafa',
-}
+    width: 110,
+    height: 110,
+    borderWidth: 1.2,
+    borderColor: '#bbb',
+    borderRadius: 10,
+    borderStyle: 'dashed',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fafafa',
+  }
 });

@@ -8,8 +8,9 @@ import { Authcontext } from '../../../context/Authcontext';
 
 
 
+
 const Profile = () => {
-  const { user } = useContext(Authcontext);
+  const { user, switchRole } = useContext(Authcontext);
   const navigation = useNavigation();
 
   const [isEnabled, setIsEnabled] = useState(true);
@@ -19,25 +20,50 @@ const Profile = () => {
   const { logout } = useContext(Authcontext);
 
   const handleLogout = () => {
-  Alert.alert(
-    'Confirm Logout',
-    'Are you sure you want to logout?',
-    [
-      {
-        text: 'Cancel',
-        style: 'cancel',
-      },
-      {
-        text: 'Logout',
-        onPress: async () => {
-          await logout();
+    Alert.alert(
+      'Confirm Logout',
+      'Are you sure you want to logout?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
         },
-        style: 'destructive',
-      },
-    ],
-    { cancelable: true }
-  );
-};
+        {
+          text: 'Logout',
+          onPress: async () => {
+            await logout();
+          },
+          style: 'destructive',
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
+  const handleSwitchPartner = async () => {
+    Alert.alert(
+      'Confirm Switch',
+      'Are you sure you want to switch to Partner?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Switch',
+          onPress: async () => {
+            if (user.additionalRole === 'Partner') {
+              await switchRole('Partner');
+            } else {
+              Alert.alert('Access Denied', 'Only Admins can switch to the Admin dashboard');
+            }
+          },
+          style: 'destructive',
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
 
   // const { isDarkMode, toggleTheme } = useContext(ThemeContext);
@@ -61,16 +87,16 @@ const Profile = () => {
             source={require('../../../assets/person2.png')}
             style={styles.avatar}
           />
-          <Text style={styles.name}>Ruban M</Text>
-          <Text style={styles.email}>ruban@gmail.com</Text>
+          <Text style={styles.name}>{user.name}</Text>
+          <Text style={styles.email}>{user.email}</Text>
 
         </View>
 
 
         <ScrollView style={styles.bottomSection}>
           <OptionItem icon="account-group-outline" label="Partner’s Management" onPress={() => navigation.navigate('MangePartner')} />
-          <OptionItem icon="lock-outline" label="Change Password" />
-          <OptionItem icon="account-convert" label="Switch Partner" />
+          <OptionItem icon="account-edit" label="Edit Profile" onPress={() => navigation.navigate('AdminEdit')} />
+          <OptionItem icon="account-convert" label="Switch Partner" onPress={handleSwitchPartner} />
 
 
           <OptionItem
@@ -162,8 +188,8 @@ const styles = StyleSheet.create({
   },
   bottomSection: {
     backgroundColor: '#fff',
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
     padding: 20,
     height: 479,
   },

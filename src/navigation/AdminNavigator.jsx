@@ -6,6 +6,11 @@ import AdminFooter from '../components/admin/AdminFooter';
 import AdminDashboard from '../screens/admin/AdminDashboard';
 import PartnerManagement from '../screens/admin/Profile/PartnerManagement';
 import AddPartnerForm from '../screens/admin/Profile/AddPartnerForm';
+import AdminPending from '../screens/admin/Expense/AdminPending';
+import AdminApproved from '../screens/admin/Expense/AdminApproved';
+import AdminRejected from '../screens/admin/Expense/AdminRejected';
+import AdminExpenseDetails from '../screens/admin/Expense/AdminExpenseDetails';
+import EditProfile from '../screens/commonScreen/EditProfile';
 
 const Stack = createNativeStackNavigator();
  
@@ -17,6 +22,12 @@ export default function AdminNavigator() {
       <Stack.Screen name='footer' component={AdminFooter} />
       <Stack.Screen name='MangePartner' component={PartnerManagement} />
       <Stack.Screen name='AddPartnerForm' component={AddPartnerForm} />
+      <Stack.Screen name='AdminPending' component={AdminPending} />
+      <Stack.Screen name='AdminApproved' component={AdminApproved} />
+      <Stack.Screen name='AdminRejected' component={AdminRejected} />
+      <Stack.Screen name='details' component={AdminExpenseDetails} />
+      <Stack.Screen name='AdminEdit' component={EditProfile} />
+      
     </Stack.Navigator>
   );
 }

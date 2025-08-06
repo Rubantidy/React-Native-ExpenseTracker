@@ -14,7 +14,7 @@ const LoginScreen = () => {
       return;
     }
 
-    try { 
+    try {
       const app = getApp();
       const db = getDatabase(app);
       const partnerRef = ref(db, '/partners');
@@ -64,9 +64,33 @@ const LoginScreen = () => {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#fff' },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 30, textAlign: 'center' },
-  input: { borderWidth: 1, borderColor: '#ccc', padding: 12, borderRadius: 8, marginBottom: 20 },
-  button: { backgroundColor: '#3A7AFE', padding: 15, borderRadius: 8 },
-  buttonText: { color: '#fff', textAlign: 'center', fontWeight: 'bold' },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: '#fff'
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 30,
+    textAlign: 'center'
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 20
+  },
+  button: { 
+    backgroundColor: '#3A7AFE',
+    padding: 15,
+    borderRadius: 8
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: 'bold'
+  },
 });

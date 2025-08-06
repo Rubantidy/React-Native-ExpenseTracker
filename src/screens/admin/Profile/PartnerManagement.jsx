@@ -1,12 +1,13 @@
 import { FlatList, Image, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import LinearGradient from 'react-native-linear-gradient'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { getApp } from '@react-native-firebase/app';
 import { getDatabase, onValue, ref } from '@react-native-firebase/database';
+import { LoaderContext } from '../../../context/LoaderContext';
 
- 
+
 const PartnerCard = ({ partner }) => (
   <View style={styles.card}>
     <View style={styles.left}>
@@ -28,12 +29,14 @@ const PartnerCard = ({ partner }) => (
 const PartnerManagement = () => {
   const navigation = useNavigation();
   const [partnerData, setpartnerData] = React.useState([]);
+  const { showLoader, hideLoader } = useContext(LoaderContext);
 
 
   React.useEffect(() => {
     const app = getApp();
     const db = getDatabase(app);
     const partnerRef = ref(db, '/partners');
+    showLoader();
 
     const unsubscribe = onValue(partnerRef, (snapshot) => {
       const data = snapshot.val();
@@ -46,10 +49,11 @@ const PartnerManagement = () => {
       } else {
         setpartnerData([]);
       }
+      hideLoader();
     });
     return () => unsubscribe();
   }, []);
-  
+
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <View style={styles.bar}></View>

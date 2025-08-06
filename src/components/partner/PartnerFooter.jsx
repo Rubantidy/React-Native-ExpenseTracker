@@ -31,7 +31,7 @@ const PartnerFooter = () => {
         }}
       />
       <Tab.Screen
-        name="AddExpense"
+        name="Add Expense"
         component={AddExpense}
         options={{
           tabBarIcon: ({ color }) => (

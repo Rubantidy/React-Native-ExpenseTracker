@@ -23,6 +23,7 @@ import storage from '@react-native-firebase/storage';
 import { Authcontext } from '../../../context/Authcontext';
 import { LoaderContext } from '../../../context/LoaderContext';
 import { useNavigation } from '@react-navigation/native';
+import { sendNotificationToAdmins } from '../../Notification/sendNotification';
 
 
 const EditExpense = ({ route }) => {
@@ -130,6 +131,7 @@ const EditExpense = ({ route }) => {
 
       const expenseRef = ref(db, `expensedetails/${expense.expenseId}`);
       await set(expenseRef, updatedExpense);
+      await sendNotificationToAdmins(`${expense.name} Edit the Pending expense and Resubmit for approval - ${expense.expenseId}`);
 
       ToastAndroid.show('Expense Updated Successfully!', ToastAndroid.SHORT);
       navigation.goBack();

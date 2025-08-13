@@ -15,7 +15,7 @@ const HomeScreen = () => {
   const [recentActivities, setRecentActivities] = useState([]);
 
   const { user } = useContext(Authcontext);
-  const navigation = useNavigation();
+  const navigation = useNavigation(); 
 
   useEffect(() => {
     const app = getApp();

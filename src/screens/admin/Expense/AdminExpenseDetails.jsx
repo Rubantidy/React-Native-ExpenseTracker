@@ -1,24 +1,46 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, Platform, StatusBar, ToastAndroid, Image, Pressable, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Platform, StatusBar, ToastAndroid, Image, Pressable, Modal, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Feather';
 import { getApp } from '@react-native-firebase/app';
 import { getDatabase, ref, remove } from '@react-native-firebase/database';
+import { sendNotification } from '../../Notification/sendNotification';
 
 
 const AdminExpenseDetails = ({ route }) => {
     const { expense } = route.params;
     const navigation = useNavigation();
-    const [modalVisible, setModalVisible] = useState(false);
-    
 
-    const updateExpenseStatus = async (newStatus) => {
+    const [modalVisible, setModalVisible] = useState(false); // image preview modal
+    const [reasonModalVisible, setReasonModalVisible] = useState(false); // rejection reason modal
+    const [rejectionReason, setRejectionReason] = useState('');
+
+    const updateExpenseStatus = async (newStatus, reason = '') => {
         try {
             const app = getApp();
             const db = getDatabase(app);
             const dbRef = ref(db, `expensedetails/${expense.expenseId}`);
-            await dbRef.update({ status: newStatus });
+
+            // Prepare update data
+            const updateData = { status: newStatus };
+            if (newStatus === 'Rejected') {
+                updateData.rejectionReason = reason;
+            } else if (newStatus === 'Approved') {
+                // remove rejection reason if exists
+                updateData.rejectionReason = null;
+            }
+
+            await dbRef.update(updateData);
+
+            // Send notification
+            await sendNotification(
+                expense.userId,
+                newStatus === 'Approved'
+                    ? `Your expense ${expense.expenseId} was approved`
+                    : `Your expense ${expense.expenseId} was rejected. Reason: ${reason}`
+            );
+
             ToastAndroid.show(`Expense ${newStatus} successfully!`, ToastAndroid.SHORT);
             navigation.goBack();
         } catch (error) {
@@ -26,7 +48,6 @@ const AdminExpenseDetails = ({ route }) => {
             Alert.alert("Error", "Something went wrong while updating status.");
         }
     };
-
 
     const handleApprove = () => {
         Alert.alert(
@@ -40,19 +61,12 @@ const AdminExpenseDetails = ({ route }) => {
     };
 
     const handleReject = () => {
-        Alert.alert(
-            "Confirm Rejection",
-            "Are you sure you want to reject this expense?",
-            [
-                { text: "Cancel", style: "cancel" },
-                { text: "Reject", onPress: () => updateExpenseStatus('Rejected') }
-            ]
-        );
+        setReasonModalVisible(true);
     };
 
     const handleDownload = () => {
-  navigation.navigate('VoucherPreview', { expense });
-};
+        navigation.navigate('VoucherPreview', { expense });
+    };
 
     const renderButtons = () => {
         switch (expense.status) {
@@ -83,6 +97,7 @@ const AdminExpenseDetails = ({ route }) => {
                 return null;
         }
     };
+
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0');
@@ -91,9 +106,7 @@ const AdminExpenseDetails = ({ route }) => {
         return `${day}-${month}-${year}`;
     };
 
-
     return (
-
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
             <View style={styles.bar} />
 
@@ -133,6 +146,7 @@ const AdminExpenseDetails = ({ route }) => {
                     </TouchableOpacity>
                 )}
 
+                {/* Receipt Modal */}
                 <Modal visible={modalVisible} transparent={true}>
                     <View style={styles.modalContainer}>
                         <TouchableOpacity style={styles.closeArea} onPress={() => setModalVisible(false)} />
@@ -147,6 +161,63 @@ const AdminExpenseDetails = ({ route }) => {
                     </View>
                 </Modal>
 
+                {/* Rejection Reason Modal */}
+                <Modal visible={reasonModalVisible} transparent animationType="slide">
+                    <View style={{
+                        flex: 1,
+                        backgroundColor: 'rgba(0,0,0,0.5)',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <View style={{
+                            backgroundColor: '#fff',
+                            width: '85%',
+                            borderRadius: 8,
+                            padding: 20
+                        }}>
+                            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+                                Reason for Rejection
+                            </Text>
+
+                            <TextInput
+                                style={{
+                                    borderWidth: 1,
+                                    borderColor: '#ccc',
+                                    borderRadius: 6,
+                                    padding: 10,
+                                    minHeight: 80,
+                                    textAlignVertical: 'top'
+                                }}
+                                multiline
+                                placeholder="Type your reason here..."
+                                value={rejectionReason}
+                                onChangeText={setRejectionReason}
+                            />
+
+                            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 15 }}>
+                                <TouchableOpacity
+                                    onPress={() => setReasonModalVisible(false)}
+                                    style={{ marginRight: 10 }}
+                                >
+                                    <Text style={{ color: 'red' }}>Cancel</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        if (rejectionReason.trim() === '') {
+                                            Alert.alert('Please enter a reason');
+                                            return;
+                                        }
+                                        setReasonModalVisible(false);
+                                        updateExpenseStatus('Rejected', rejectionReason);
+                                    }}
+                                >
+                                    <Text style={{ color: 'green', fontWeight: 'bold' }}>Submit</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
 
                 {renderButtons()}
             </View>
@@ -154,8 +225,7 @@ const AdminExpenseDetails = ({ route }) => {
     );
 };
 
-
-export default AdminExpenseDetails
+export default AdminExpenseDetails;
 
 const styles = StyleSheet.create({
     bar: {

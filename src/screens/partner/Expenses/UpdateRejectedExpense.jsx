@@ -14,6 +14,7 @@ import { getApp } from '@react-native-firebase/app';
 import { getDatabase, onValue, push, ref, set } from '@react-native-firebase/database';
 import { useNavigation } from '@react-navigation/native';
 import storage from '@react-native-firebase/storage';
+import { sendNotificationToAdmins } from '../../Notification/sendNotification';
 
 const UpdateRejectedExpense = ({ route }) => {
   const { expense } = route.params;
@@ -117,6 +118,7 @@ const UpdateRejectedExpense = ({ route }) => {
       };
 
       await set(ref(db, `expensedetails/${expense.expenseId}`), updatedExpense);
+      await sendNotificationToAdmins(`${expense.name} resubmitted a Rejected expense for approval - ${expense.expenseId}`);
 
       ToastAndroid.show('Expense Resubmitted for Approval!', ToastAndroid.SHORT);
       navigation.goBack();

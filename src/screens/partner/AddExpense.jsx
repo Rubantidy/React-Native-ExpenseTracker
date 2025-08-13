@@ -24,6 +24,7 @@ import { Picker } from '@react-native-picker/picker';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import { LoaderContext } from '../../context/LoaderContext';
+import { sendNotificationToAdmins } from '../Notification/sendNotification';
 
 
 const AddExpense = () => {
@@ -33,7 +34,7 @@ const AddExpense = () => {
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [date, setDate] = useState(new Date());
-  const [invoice, setinvoice] = useState(null);
+  const [invoice, setinvoice] = useState(null); 
   const [amount, setAmount] = useState(null);
   const [category, setCategory] = useState(null);
   const [categories, setCategories] = useState([]);
@@ -194,6 +195,7 @@ const AddExpense = () => {
     }
 
     const expenseData = {
+      userId: user?.id,
       expenseId,
       name: user?.name || '',
       invoice,
@@ -213,6 +215,7 @@ const AddExpense = () => {
     try {
       await set(expenseRef, expenseData);
       await set(lastIdRef, String(newId));
+      await sendNotificationToAdmins(`${user.name} submitted a new expense for approval - ${expenseId}`);
       ToastAndroid.show('Expense Added Successfully!', ToastAndroid.SHORT);
       handleClear();
     } catch (err) {

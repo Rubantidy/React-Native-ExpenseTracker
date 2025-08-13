@@ -24,6 +24,7 @@ import { Picker } from '@react-native-picker/picker';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import { LoaderContext } from '../../context/LoaderContext';
+import { sendNotificationToAdmins } from '../Notification/sendNotification';
 
 const AddPartnerExpense = () => {
     const navigation = useNavigation();
@@ -220,6 +221,7 @@ const AddPartnerExpense = () => {
         }
 
         const expenseData = {
+            userId: selectedPartner?.id || '',
             expenseId,
             name: selectedPartner?.name || '',
             invoice,
@@ -240,6 +242,7 @@ const AddPartnerExpense = () => {
         try {
             await set(expenseRef, expenseData);
             await set(lastIdRef, String(newId));
+            await sendNotificationToAdmins(`${selectedPartner?.name} submitted a new expense for approval - ${expenseId}`);
             ToastAndroid.show('Expense Added Successfully!', ToastAndroid.SHORT);
             handleClear();
         } catch (err) {

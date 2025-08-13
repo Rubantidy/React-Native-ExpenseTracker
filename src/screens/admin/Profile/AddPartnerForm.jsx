@@ -4,7 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
-import database, { equalTo, get, getDatabase, orderByChild, push, query, ref } from '@react-native-firebase/database';
+import database, { equalTo, get, getDatabase, orderByChild, push, query, ref, set } from '@react-native-firebase/database';
 import { getApp } from '@react-native-firebase/app';
 
 
@@ -31,85 +31,89 @@ const AddPartnerForm = () => {
   // };
 
 
-  const handleAddPartner = async () => {
-    let errors = {};
+ const handleAddPartner = async () => {
+  let errors = {};
 
-    if (!name.trim()) errors.name = 'Name is required';
-    if (!mobile.trim()) errors.mobile = 'Mobile number is required';
-    if (!email.trim()) errors.email = 'Email is required';
-    else if (mobile.length !== 10) errors.mobile = 'Mobile number must be 10 digits';
-    if (!role) errors.role = 'Role is required';
+  if (!name.trim()) errors.name = 'Name is required';
+  if (!mobile.trim()) errors.mobile = 'Mobile number is required';
+  if (!email.trim()) errors.email = 'Email is required';
+  else if (mobile.length !== 10) errors.mobile = 'Mobile number must be 10 digits';
+  if (!role) errors.role = 'Role is required';
 
-    setFormErrors(errors);
+  setFormErrors(errors);
 
-    if (Object.keys(errors).length > 0) return;
+  if (Object.keys(errors).length > 0) return;
 
-    Alert.alert(
-      'Confirm Add Partner',
-      'Are you sure you want to add this partner?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Add',
-          onPress: async () => {
-            // const generatedPassword = generatePassword();
-            // setPassword(generatedPassword);
+  Alert.alert(
+    'Confirm Add Partner',
+    'Are you sure you want to add this partner?',
+    [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Add',
+        onPress: async () => {
+          const newPartner = {
+            name,
+            mobile,
+            email,
+            role,
+            additionalRole: role === 'Admin' ? 'Partner' : '#',
+            createdAt: new Date().toISOString(),
+          };
 
-            const newPartner = {
-              name,
-              mobile,
-              email,
-              role,
-              // password: generatedPassword,
-              additionalRole: role === 'Admin' ? 'Partner' : '#',
-              createdAt: new Date().toISOString(),
-            };
+          try {
+            const app = getApp();
+            const db = getDatabase(app);
+            const partnerRef = ref(db, '/partners');
 
-            try {
-              const app = getApp();
-              const db = getDatabase(app);
-              const partnerRef = ref(db, '/partners');
-
-              const emailQuery = query(partnerRef, orderByChild('email'), equalTo(email));
-              const snapshot = await get(emailQuery);
-              if (snapshot.exists()) {
-                ToastAndroid.show('❌ Email already exists', ToastAndroid.SHORT);
-                return;
-              }
-
-              const mobileQuery = query(partnerRef, orderByChild('mobile'), equalTo(mobile));
-              const snapshot2 = await get(mobileQuery);
-              if (snapshot2.exists()) {
-                ToastAndroid.show('❌ Mobile Number already exists', ToastAndroid.SHORT);
-                return;
-              }
-
-              push(partnerRef, newPartner)
-                .then(() => {
-                  ToastAndroid.show('✅ Partner Added', ToastAndroid.SHORT);
-                  setName('');
-                  setMobile('');
-                  setEmail('');
-                  setRole('');
-                  // setPassword('');
-                  setFormErrors({});
-                })
-                .catch((error) => {
-                  console.error('Firebase Error:', error);
-                  ToastAndroid.show('❌ Failed to add partner', ToastAndroid.SHORT);
-                });
-            } catch (err) {
-              console.error('Firebase Init Error:', err);
-              ToastAndroid.show('❌ Firebase not initialized', ToastAndroid.SHORT);
+            // Check for email duplication
+            const emailQuery = query(partnerRef, orderByChild('email'), equalTo(email));
+            const snapshot = await get(emailQuery);
+            if (snapshot.exists()) {
+              ToastAndroid.show('❌ Email already exists', ToastAndroid.SHORT);
+              return;
             }
-          },
+
+            // Check for mobile duplication
+            const mobileQuery = query(partnerRef, orderByChild('mobile'), equalTo(mobile));
+            const snapshot2 = await get(mobileQuery);
+            if (snapshot2.exists()) {
+              ToastAndroid.show('❌ Mobile Number already exists', ToastAndroid.SHORT);
+              return;
+            }
+
+            // Push partner
+            const newPartnerRef = push(partnerRef);
+            await set(newPartnerRef, newPartner);
+
+            // ✅ Create dummy notification for this user
+            const dummyMessage =
+              role === "Admin"
+                ? `Welcome Admin ${name}, you can now manage expenses!`
+                : `Welcome Partner ${name}, you can now submit expenses!`;
+
+            const notifRef = push(ref(db, `notifications/${newPartnerRef.key}`));
+            await set(notifRef, {
+              message: dummyMessage,
+              timestamp: Date.now(),
+              read: false
+            });
+
+            ToastAndroid.show('✅ Partner Added with welcome notification', ToastAndroid.SHORT);
+            setName('');
+            setMobile('');
+            setEmail('');
+            setRole('');
+            setFormErrors({});
+          } catch (err) {
+            console.error('Firebase Error:', err);
+            ToastAndroid.show('❌ Failed to add partner', ToastAndroid.SHORT);
+          }
         },
-      ]
-    );
-  };
+      },
+    ]
+  );
+};
 
   return (
     <ScrollView>

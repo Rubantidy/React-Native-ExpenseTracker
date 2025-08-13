@@ -1,8 +1,12 @@
-import { Image, Platform, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { Image, Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useUnreadCount } from '../../screens/Notification/useUnreadCount';
+import { useNavigation } from '@react-navigation/native';
 
 export default function PartnerHeader() {
+    const unreadCount = useUnreadCount();
+  const navigation = useNavigation();
  return (
      <View>
        <View style={styles.bar}></View>
@@ -14,7 +18,14 @@ export default function PartnerHeader() {
            />
            <Text style={{ fontSize: 22, fontWeight: 'bold' }}>Expense Tracker</Text>
          </View>
-         <MaterialCommunityIcons name="bell-badge-outline" size={24} />
+         <TouchableOpacity onPress={() => navigation.navigate('Notifications')}>
+          <MaterialCommunityIcons name="bell-badge-outline" size={26} />
+          {unreadCount > 0 && (
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{unreadCount}</Text>
+            </View>
+          )}
+        </TouchableOpacity>
          <MaterialCommunityIcons name="history" size={24} />
        </View>
  
@@ -46,5 +57,19 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginLeft: 10,
     resizeMode: 'contain'
-  }
+  },
+   badge: {
+    position: 'absolute',
+    right: -4,
+    top: -4,
+    backgroundColor: 'red',
+    borderRadius: 10,
+    paddingHorizontal: 5,
+    paddingVertical: 1,
+  },
+  badgeText: {
+    color: 'white',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
 })

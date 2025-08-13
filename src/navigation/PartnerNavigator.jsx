@@ -14,6 +14,8 @@ import EditExpense from '../screens/partner/Expenses/EditExpense';
 import UpdateRejectedExpense from '../screens/partner/Expenses/UpdateRejectedExpense';
 import { GenerateVoucherPDF } from '../screens/commonScreen/voucherGenerator';
 import VoucherPreview from '../screens/commonScreen/VoucherPreview';
+import NoInternetScreen from '../screens/NoInternetScreen';
+import NotificationsScreen from '../screens/Notification/NotificationsScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -33,6 +35,7 @@ const PartnerNavigator = () => {
       <Stack.Screen name='UpdateExpense' component={UpdateRejectedExpense} />
       <Stack.Screen name='GenerateVoucher' component={GenerateVoucherPDF} />
       <Stack.Screen name='VoucherPreview' component={VoucherPreview} />
+       <Stack.Screen name='Notifications' component={NotificationsScreen} />
     </Stack.Navigator>
   ) 
 }

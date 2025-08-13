@@ -17,7 +17,7 @@ const OtpScreen = ({ route, setUserRole }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Enter OTP</Text> 
+      <Text style={styles.title}>Enter OTP</Text>
       <TextInput
         style={styles.input}
         placeholder="6-digit OTP"
@@ -65,4 +65,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
 });
- 

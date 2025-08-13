@@ -4,7 +4,7 @@ import AdminFooter from '../../components/admin/AdminFooter'
 
 
 const AdminDashboard = () => {
-  return ( 
+  return (
     <View style={{ flex: 1, backgroundColor: '#F6F8FB' }}>
       <AdminFooter />
     </View>

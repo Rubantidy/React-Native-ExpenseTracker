@@ -27,7 +27,7 @@ import { sendNotificationToAdmins } from '../../Notification/sendNotification';
 
 
 const EditExpense = ({ route }) => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
   const { expense } = route.params;
   const { user } = useContext(Authcontext);
   const { showLoader, hideLoader } = useContext(LoaderContext);

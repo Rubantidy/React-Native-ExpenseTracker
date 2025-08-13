@@ -113,7 +113,7 @@ const UpdateRejectedExpense = ({ route }) => {
         gst,
         date: date.toISOString(),
         imageUrl: uploadedImageUrl,
-        status: 'Pending', 
+        status: 'Pending',
         updatedAt: new Date().toISOString(),
       };
 

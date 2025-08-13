@@ -16,7 +16,7 @@ import NoInternetScreen from '../screens/NoInternetScreen';
 import NotificationsScreen from '../screens/Notification/NotificationsScreen';
 
 const Stack = createNativeStackNavigator();
- 
+
 export default function AdminNavigator() {
   return (
     <Stack.Navigator initialRouteName='Dashboard' screenOptions={{ headerShown: false }}>
@@ -32,7 +32,7 @@ export default function AdminNavigator() {
       <Stack.Screen name='AdminEdit' component={EditProfile} />
       <Stack.Screen name='VoucherPreview' component={VoucherPreview} />
       <Stack.Screen name='Notifications' component={NotificationsScreen} />
-      
+
     </Stack.Navigator>
   );
 }

@@ -5,13 +5,13 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import OtpScreen from '../screens/auth/OtpScreen';
 
 
-const Stack = createNativeStackNavigator(); 
+const Stack = createNativeStackNavigator();
 
 const AuthNavigator = ({ setUserRole }) => {
   return (
     <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
-        <Stack.Screen name='Login' component={LoginScreen} />
-          <Stack.Screen name="Otp">
+      <Stack.Screen name='Login' component={LoginScreen} />
+      <Stack.Screen name="Otp">
         {(props) => <OtpScreen {...props} setUserRole={setUserRole} />}
       </Stack.Screen>
     </Stack.Navigator>

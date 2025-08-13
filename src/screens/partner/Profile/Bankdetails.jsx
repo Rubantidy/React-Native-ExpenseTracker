@@ -24,33 +24,33 @@ const Bankdetails = () => {
 
     const [errors, setErrors] = useState({});
 
-useEffect(() => {
-  if (user?.id) {
-    showLoader(); 
+    useEffect(() => {
+        if (user?.id) {
+            showLoader();
 
-    const bankRef = ref(db, `/bankdetails/${user.id}`);
-    const unsubscribe = onValue(
-      bankRef,
-      (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          setAccountHolder(data.accountHolder || '');
-          setBankName(data.bankName || '');
-          setAccountNumber(data.accountNumber || '');
-          setConfirmAccountNumber(data.accountNumber || '');
-          setIfscCode(data.ifscCode || '');
+            const bankRef = ref(db, `/bankdetails/${user.id}`);
+            const unsubscribe = onValue(
+                bankRef,
+                (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        setAccountHolder(data.accountHolder || '');
+                        setBankName(data.bankName || '');
+                        setAccountNumber(data.accountNumber || '');
+                        setConfirmAccountNumber(data.accountNumber || '');
+                        setIfscCode(data.ifscCode || '');
+                    }
+                    hideLoader();
+                },
+                (error) => {
+                    console.error('Error fetching bank details:', error);
+                    hideLoader();
+                }
+            );
+
+            return () => unsubscribe();
         }
-        hideLoader(); 
-      },
-      (error) => {
-        console.error('Error fetching bank details:', error);
-        hideLoader(); 
-      }
-    );
-
-    return () => unsubscribe(); 
-  }
-}, [user]);
+    }, [user]);
 
 
     const validate = () => {

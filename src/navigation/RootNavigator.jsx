@@ -6,7 +6,7 @@ import PartnerNavigator from './PartnerNavigator';
 import { Authcontext } from '../context/Authcontext';
 
 const RootNavigator = () => {
-   const { user, activeRole } = useContext(Authcontext);
+  const { user, activeRole } = useContext(Authcontext);
 
   if (!user) return <AuthNavigator />;
   if (activeRole === 'Admin') return <AdminNavigator />;

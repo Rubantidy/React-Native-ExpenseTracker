@@ -8,9 +8,9 @@ const AdminHeader = () => {
   const unreadCount = useUnreadCount();
   const navigation = useNavigation();
   return (
-    
+
     <View>
-      <View style={styles.bar}></View> 
+      <View style={styles.bar}></View>
       <View style={styles.div2}>
         <View style={styles.div3}>
           <Image
@@ -28,7 +28,7 @@ const AdminHeader = () => {
           )}
         </TouchableOpacity>
       </View>
- 
+
     </View>
   );
 };
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     resizeMode: 'contain'
   },
-    badge: {
+  badge: {
     position: 'absolute',
     right: -4,
     top: -4,

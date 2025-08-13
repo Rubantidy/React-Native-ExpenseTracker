@@ -90,7 +90,7 @@ const Profile = () => {
           />
           <Text style={styles.name}>{user.name}</Text>
           <Text style={styles.email}>{user.email}</Text>
-           <Text style={styles.name}>Acc No: {bankDetails?.accountNumber}</Text>
+          <Text style={styles.name}>Acc No: {bankDetails?.accountNumber}</Text>
 
         </View>
 

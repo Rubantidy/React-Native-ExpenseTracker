@@ -23,9 +23,9 @@ export default function VoucherPreview({ route, navigation }) {
     return `${d.getDate().toString().padStart(2, '0')}-${d.toLocaleString('en-US', { month: 'short' })}-${d.getFullYear()}`;
   };
 
-const firstNumberMatch = expense.expenseId?.match(/\d+/); 
-const voucherIdNumber = firstNumberMatch ? firstNumberMatch[0].slice(0, 2) : '00';
-const voucherId = `E-voucher-${voucherIdNumber}`;
+  const firstNumberMatch = expense.expenseId?.match(/\d+/);
+  const voucherIdNumber = firstNumberMatch ? firstNumberMatch[0].slice(0, 2) : '00';
+  const voucherId = `E-voucher-${voucherIdNumber}`;
 
 
   return (
@@ -77,7 +77,7 @@ const voucherId = `E-voucher-${voucherIdNumber}`;
             <Text style={styles.value}>{expense.gst || '-'}</Text>
           </View>
 
-            <View style={styles.row}>
+          <View style={styles.row}>
             <Text style={styles.label}>Status</Text>
             <Text style={styles.value}>{expense.status || '-'}</Text>
           </View>
@@ -97,17 +97,44 @@ const voucherId = `E-voucher-${voucherIdNumber}`;
 }
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: '#f5f5f5', padding: 10 },
-  card: { padding: 10, borderRadius: 12 },
-  brand: { fontWeight: 'bold', color: '#5312A6', fontSize: 20 },
+  container: {
+    backgroundColor: '#f5f5f5',
+    padding: 10
+  },
+  card: {
+    padding: 10,
+    borderRadius: 12
+  },
+  brand: {
+    fontWeight: 'bold',
+    color: '#5312A6',
+    fontSize: 20
+  },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 6,
   },
-  label: { color: '#555', fontWeight: '600' },
-  value: { color: '#000', fontWeight: '700' },
-  sectionTitle: { fontWeight: 'bold', marginBottom: 4 },
-  footer: { fontSize: 12, color: '#777', textAlign: 'center', marginTop: 10 },
-  downloadBtn: { backgroundColor: '#5312A6', marginRight: 10 },
+  label: {
+    color: '#555',
+    fontWeight: '600'
+  },
+  value: {
+    color: '#000',
+    fontWeight: '700'
+  },
+  sectionTitle: {
+    fontWeight: 'bold',
+    marginBottom: 4
+  },
+  footer: {
+    fontSize: 12,
+    color: '#777',
+    textAlign: 'center',
+    marginTop: 10
+  },
+  downloadBtn: {
+    backgroundColor: '#5312A6',
+    marginRight: 10
+  },
 });

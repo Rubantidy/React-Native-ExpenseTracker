@@ -34,7 +34,7 @@ const AddExpense = () => {
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [date, setDate] = useState(new Date());
-  const [invoice, setinvoice] = useState(null); 
+  const [invoice, setinvoice] = useState(null);
   const [amount, setAmount] = useState(null);
   const [category, setCategory] = useState(null);
   const [categories, setCategories] = useState([]);

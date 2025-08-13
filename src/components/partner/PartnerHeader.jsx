@@ -5,20 +5,20 @@ import { useUnreadCount } from '../../screens/Notification/useUnreadCount';
 import { useNavigation } from '@react-navigation/native';
 
 export default function PartnerHeader() {
-    const unreadCount = useUnreadCount();
+  const unreadCount = useUnreadCount();
   const navigation = useNavigation();
- return (
-     <View>
-       <View style={styles.bar}></View>
-       <View style={styles.div2}>
-         <View style={styles.div3}>
-           <Image
-             source={require('../../assets/tidy_logo.png')}
-             style={styles.logo}
-           />
-           <Text style={{ fontSize: 22, fontWeight: 'bold' }}>Expense Tracker</Text>
-         </View>
-         <TouchableOpacity onPress={() => navigation.navigate('Notifications')}>
+  return (
+    <View>
+      <View style={styles.bar}></View>
+      <View style={styles.div2}>
+        <View style={styles.div3}>
+          <Image
+            source={require('../../assets/tidy_logo.png')}
+            style={styles.logo}
+          />
+          <Text style={{ fontSize: 22, fontWeight: 'bold' }}>Expense Tracker</Text>
+        </View>
+        <TouchableOpacity onPress={() => navigation.navigate('Notifications')}>
           <MaterialCommunityIcons name="bell-badge-outline" size={26} />
           {unreadCount > 0 && (
             <View style={styles.badge}>
@@ -26,12 +26,12 @@ export default function PartnerHeader() {
             </View>
           )}
         </TouchableOpacity>
-         <MaterialCommunityIcons name="history" size={24} />
-       </View>
- 
-     </View>
-   );
- };
+        <MaterialCommunityIcons name="history" size={24} />
+      </View>
+
+    </View>
+  );
+};
 
 
 const styles = StyleSheet.create({
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     resizeMode: 'contain'
   },
-   badge: {
+  badge: {
     position: 'absolute',
     right: -4,
     top: -4,

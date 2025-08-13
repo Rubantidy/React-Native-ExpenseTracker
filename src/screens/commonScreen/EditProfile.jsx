@@ -33,31 +33,31 @@ const EditProfile = () => {
   const [mobile, setMobile] = useState('');
   const [otpVisible, setOtpVisible] = useState(false);
   const [enteredOtp, setEnteredOtp] = useState('');
-  const [pendingUpdate, setPendingUpdate] = useState(null); 
+  const [pendingUpdate, setPendingUpdate] = useState(null);
   const [otpError, setOtpError] = useState('');
 
 
-    useEffect(() => {
-      if (user?.id) {
-        showLoader(); 
+  useEffect(() => {
+    if (user?.id) {
+      showLoader();
 
-        const userRef = ref(db, `/partners/${user.id}`);
-        const unsubscribe = onValue(userRef, (snapshot) => {
-          const data = snapshot.val();
-          if (data) {
-            setName(data.name || '');
-            setEmail(data.email || '');
-            setMobile(data.mobile || '');
-          }
-          hideLoader(); 
-        }, (error) => {
-          console.error("Error fetching user:", error);
-          hideLoader(); 
-        });
+      const userRef = ref(db, `/partners/${user.id}`);
+      const unsubscribe = onValue(userRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          setName(data.name || '');
+          setEmail(data.email || '');
+          setMobile(data.mobile || '');
+        }
+        hideLoader();
+      }, (error) => {
+        console.error("Error fetching user:", error);
+        hideLoader();
+      });
 
-        return () => unsubscribe();
-      }
-    }, [user]);
+      return () => unsubscribe();
+    }
+  }, [user]);
 
 
   const handleSave = () => {
@@ -80,7 +80,7 @@ const EditProfile = () => {
           text: 'Continue',
           onPress: () => {
             setPendingUpdate(updatedData);
-            setOtpVisible(true); 
+            setOtpVisible(true);
           },
         },
       ]
@@ -100,7 +100,7 @@ const EditProfile = () => {
         setOtpVisible(false);
         setEnteredOtp('');
         setPendingUpdate(null);
-        setOtpError(''); 
+        setOtpError('');
 
         ToastAndroid.show('✅ Profile updated successfully', ToastAndroid.SHORT);
       } catch (error) {

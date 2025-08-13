@@ -92,8 +92,8 @@ const PartnerProfile = () => {
 
 
         <ScrollView style={styles.bottomSection}>
-          <OptionItem icon="account-edit" label="Edit Profile"  onPress={() => navigation.navigate('PartnerEdit')}/>
-          <OptionItem icon="bank-outline" label="Account Details" onPress={() => navigation.navigate('BankForm')}/>
+          <OptionItem icon="account-edit" label="Edit Profile" onPress={() => navigation.navigate('PartnerEdit')} />
+          <OptionItem icon="bank-outline" label="Account Details" onPress={() => navigation.navigate('BankForm')} />
           <OptionItem icon="account-group-outline" label="Partner's Information" onPress={() => navigation.navigate('PartnersInfo')} />
           <OptionItem icon="account-convert" label="Switch Admin" onPress={handleSwitchBackToAdmin} />
 

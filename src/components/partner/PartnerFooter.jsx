@@ -16,8 +16,8 @@ const PartnerFooter = () => {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: '#ec12a4ff',
-        tabBarInactiveTintColor: "black", 
-        tabBarStyle: { backgroundColor: '#fff', borderTopWidth: 0,  height: 60 + insets.bottom, paddingBottom: insets.bottom, },
+        tabBarInactiveTintColor: "black",
+        tabBarStyle: { backgroundColor: '#fff', borderTopWidth: 0, height: 60 + insets.bottom, paddingBottom: insets.bottom, },
         tabBarLabelStyle: { fontSize: 12 },
       }}
     >

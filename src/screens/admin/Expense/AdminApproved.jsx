@@ -204,50 +204,50 @@ export default AdminApproved;
 
 const styles = StyleSheet.create({
   bar: {
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-        backgroundColor: '#fff',
-    },
-    headerContainer: {
-        height: 140,
-        justifyContent: 'center',
-        paddingHorizontal: 15,
-        marginBottom: 20,
-        borderBottomLeftRadius: 16,
-        borderBottomRightRadius: 16,
-    },
-    headerTopRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 15,
-    },
-    filterRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        gap: 10,
-    },
-    pickerWrapper: {
-        flex: 1,
-        backgroundColor: '#fff',
-        borderRadius: 20,
-        overflow: 'hidden',
-    },
-    picker: {
-        height: 50,
-        width: '100%',
-    },
-    headerText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginLeft: 10,
-    },
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    backgroundColor: '#fff',
+  },
+  headerContainer: {
+    height: 140,
+    justifyContent: 'center',
+    paddingHorizontal: 15,
+    marginBottom: 20,
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+  },
+  headerTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  filterRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 10,
+  },
+  pickerWrapper: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  picker: {
+    height: 50,
+    width: '100%',
+  },
+  headerText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginLeft: 10,
+  },
 
-    customDateText: {
-        color: 'black',
-        textAlign: 'center',
-        fontSize: 10,
-    },
+  customDateText: {
+    color: 'black',
+    textAlign: 'center',
+    fontSize: 10,
+  },
 
   card: {
     flexDirection: 'row',

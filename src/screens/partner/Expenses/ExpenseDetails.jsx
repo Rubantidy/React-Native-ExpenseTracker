@@ -39,19 +39,19 @@ const ExpenseDetails = ({ route }) => {
         );
     };
 
-        const handleEdit = () => {
-            navigation.navigate('EditExpense', { expense }); 
-        };
+    const handleEdit = () => {
+        navigation.navigate('EditExpense', { expense });
+    };
 
 
-        const handleDownload = () => {
-            navigation.navigate('VoucherPreview', { expense });
-        };
+    const handleDownload = () => {
+        navigation.navigate('VoucherPreview', { expense });
+    };
 
 
-        const handleUpdate = () => {
-            navigation.navigate('UpdateExpense', { expense });
-        };
+    const handleUpdate = () => {
+        navigation.navigate('UpdateExpense', { expense });
+    };
 
 
     const renderButtons = () => {
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     header: {
-        flexDirection: 'row', 
+        flexDirection: 'row',
         alignItems: 'center',
     },
     headerText: {

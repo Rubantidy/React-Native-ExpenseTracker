@@ -21,7 +21,7 @@ import NotificationsScreen from '../screens/Notification/NotificationsScreen';
 const Stack = createNativeStackNavigator();
 const PartnerNavigator = () => {
   return (
-   <Stack.Navigator initialRouteName='PartnerDashboard' screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName='PartnerDashboard' screenOptions={{ headerShown: false }}>
       <Stack.Screen name='PartnerDashboard' component={PartnerDashboard} />
       <Stack.Screen name='PartnersInfo' component={PartnersInfo} />
       <Stack.Screen name='AddPartnerExpense' component={AddPartnerExpense} />
@@ -29,15 +29,15 @@ const PartnerNavigator = () => {
       <Stack.Screen name='ApprovedExpense' component={ApprovedExpenses} />
       <Stack.Screen name='RejectedExpense' component={RejectedExpenses} />
       <Stack.Screen name='ExpenseDetails' component={ExpenseDetails} />
-      <Stack.Screen name='PartnerEdit' component={EditProfile} /> 
+      <Stack.Screen name='PartnerEdit' component={EditProfile} />
       <Stack.Screen name='BankForm' component={Bankdetails} />
       <Stack.Screen name='EditExpense' component={EditExpense} />
       <Stack.Screen name='UpdateExpense' component={UpdateRejectedExpense} />
       <Stack.Screen name='GenerateVoucher' component={GenerateVoucherPDF} />
       <Stack.Screen name='VoucherPreview' component={VoucherPreview} />
-       <Stack.Screen name='Notifications' component={NotificationsScreen} />
+      <Stack.Screen name='Notifications' component={NotificationsScreen} />
     </Stack.Navigator>
-  ) 
+  )
 }
 
 export default PartnerNavigator

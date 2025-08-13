@@ -16,7 +16,7 @@ const AddPartnerForm = () => {
   const [role, setRole] = useState('');
   // const [password, setPassword] = useState('');
   const [formErrors, setFormErrors] = useState({});
- 
+
 
 
   // const generatePassword = () => {
@@ -146,7 +146,7 @@ const AddPartnerForm = () => {
             style={styles.input}
             placeholder="Mobile Number"
             value={mobile}
-            onChangeText={(text) => {
+            onChangeText={(text) => { 
               const numericText = text.replace(/[^0-9]/g, ''); // allow only numbers
               setMobile(numericText);
             }}

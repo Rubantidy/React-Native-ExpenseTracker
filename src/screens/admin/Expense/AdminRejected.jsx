@@ -47,8 +47,8 @@ const AdminRejected = () => {
       style={styles.card}
     >
       <View>
-        <Text style={styles.category}>{item.category}</Text>
-        <Text style={styles.date}>{new Date(item.date).toDateString()}</Text>
+        <Text style={styles.category}>{item.name}</Text>
+        <Text style={styles.date}>{item.category}  -  {new Date(item.date).toDateString()}</Text>
       </View>
       <View style={styles.amountContainer}>
         <Text style={styles.amount}>₹{item.amount}</Text>
@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#6B7280',
     marginTop: 4,
+    fontWeight: 800,
   },
 
   amountContainer: {

@@ -65,7 +65,7 @@ const HomeScreen = () => {
       <LinearGradient colors={['#6A11CB', '#B91372']} style={styles.header}>
         <Text style={styles.headerTitle}>ADMIN DASHBOARD</Text>
         <TouchableOpacity style={styles.monthSelector}>
-          <Text style={styles.monthText}>JUL 2025</Text>
+          <Text style={styles.monthText}>AUG 2025</Text>
           <Icon name="chevron-down" size={20} color="#fff" />
         </TouchableOpacity>
 

@@ -6,6 +6,8 @@ import Icon from 'react-native-vector-icons/Feather';
 import { getApp } from '@react-native-firebase/app';
 import { getDatabase, ref, remove } from '@react-native-firebase/database';
 
+
+
 const ExpenseDetails = ({ route }) => {
     const { expense } = route.params;
     const navigation = useNavigation();
@@ -24,8 +26,7 @@ const ExpenseDetails = ({ route }) => {
                         const expenseRef = ref(db, `expensedetails/${expense.expenseId}`);
                         remove(expenseRef)
                             .then(() => {
-                                ToastAndroid.show(' ✅Expesen delete Successfully', ToastAndroid.SHORT)
-
+                                ToastAndroid.show(' ✅Expense delete Successfully', ToastAndroid.SHORT)
                                 navigation.goBack()
                             })
                             .catch((error) => {
@@ -38,19 +39,20 @@ const ExpenseDetails = ({ route }) => {
         );
     };
 
-    const handleEdit = () => {
-        // navigation.navigate('EditExpense', { expense });
-        console.log('Handle Edit Expense');
-    };
+        const handleEdit = () => {
+            navigation.navigate('EditExpense', { expense }); 
+        };
 
-    const handleDownload = () => {
-        console.log('Download voucher logic here');
-    };
 
-    const handleUpdate = () => {
-        // navigation.navigate('UpdateRejectedExpense', { expense });
-        console.log('Update Logic Here');
-    };
+        const handleDownload = () => {
+            navigation.navigate('VoucherPreview', { expense });
+        };
+
+
+        const handleUpdate = () => {
+            navigation.navigate('UpdateExpense', { expense });
+        };
+
 
     const renderButtons = () => {
         switch (expense.status) {
@@ -68,7 +70,7 @@ const ExpenseDetails = ({ route }) => {
             case 'Approved':
                 return (
                     <TouchableOpacity style={styles.downloadButton} onPress={handleDownload}>
-                        <Text style={styles.buttonText}>Download Voucher</Text>
+                        <Text style={styles.buttonText}>Voucher</Text>
                     </TouchableOpacity>
                 );
             case 'Rejected':
@@ -111,6 +113,7 @@ const ExpenseDetails = ({ route }) => {
             </LinearGradient>
 
             <View style={styles.container}>
+                <Text style={styles.label}>Name: {expense.name}</Text>
                 <Text style={styles.label}>Expense Id: {expense.expenseId}</Text>
                 <Text style={styles.label}>Invoice: {expense.invoice}</Text>
                 <Text style={styles.label}>Amount: ₹{expense.amount}</Text>
@@ -163,7 +166,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     header: {
-        flexDirection: 'row',
+        flexDirection: 'row', 
         alignItems: 'center',
     },
     headerText: {

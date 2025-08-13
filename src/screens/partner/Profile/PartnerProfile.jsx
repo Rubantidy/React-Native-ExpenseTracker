@@ -14,6 +14,7 @@ const PartnerProfile = () => {
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const { logout } = useContext(Authcontext);
+  const { bankDetails } = useContext(Authcontext);
 
   const handleLogout = () => {
     Alert.alert(
@@ -61,6 +62,7 @@ const PartnerProfile = () => {
     );
   };
 
+
   // const { isDarkMode, toggleTheme } = useContext(ThemeContext);
   return (
     <View>
@@ -84,13 +86,14 @@ const PartnerProfile = () => {
           />
           <Text style={styles.name}>{user.name}</Text>
           <Text style={styles.email}>{user.email}</Text>
+          <Text style={styles.name}>Acc No: {bankDetails?.accountNumber}</Text>
 
         </View>
 
 
         <ScrollView style={styles.bottomSection}>
           <OptionItem icon="account-edit" label="Edit Profile"  onPress={() => navigation.navigate('PartnerEdit')}/>
-          <OptionItem icon="bank-outline" label="Account Details" />
+          <OptionItem icon="bank-outline" label="Account Details" onPress={() => navigation.navigate('BankForm')}/>
           <OptionItem icon="account-group-outline" label="Partner's Information" onPress={() => navigation.navigate('PartnersInfo')} />
           <OptionItem icon="account-convert" label="Switch Admin" onPress={handleSwitchBackToAdmin} />
 

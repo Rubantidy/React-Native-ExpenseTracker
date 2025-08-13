@@ -18,6 +18,7 @@ const Profile = () => {
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const { logout } = useContext(Authcontext);
+  const { bankDetails } = useContext(Authcontext);
 
   const handleLogout = () => {
     Alert.alert(
@@ -89,6 +90,7 @@ const Profile = () => {
           />
           <Text style={styles.name}>{user.name}</Text>
           <Text style={styles.email}>{user.email}</Text>
+           <Text style={styles.name}>Acc No: {bankDetails?.accountNumber}</Text>
 
         </View>
 

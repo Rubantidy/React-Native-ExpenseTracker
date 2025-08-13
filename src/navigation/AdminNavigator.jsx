@@ -11,6 +11,7 @@ import AdminApproved from '../screens/admin/Expense/AdminApproved';
 import AdminRejected from '../screens/admin/Expense/AdminRejected';
 import AdminExpenseDetails from '../screens/admin/Expense/AdminExpenseDetails';
 import EditProfile from '../screens/commonScreen/EditProfile';
+import VoucherPreview from '../screens/commonScreen/VoucherPreview';
 
 const Stack = createNativeStackNavigator();
  
@@ -27,6 +28,7 @@ export default function AdminNavigator() {
       <Stack.Screen name='AdminRejected' component={AdminRejected} />
       <Stack.Screen name='details' component={AdminExpenseDetails} />
       <Stack.Screen name='AdminEdit' component={EditProfile} />
+      <Stack.Screen name='VoucherPreview' component={VoucherPreview} />
       
     </Stack.Navigator>
   );

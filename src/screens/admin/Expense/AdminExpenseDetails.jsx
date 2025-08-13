@@ -11,6 +11,7 @@ const AdminExpenseDetails = ({ route }) => {
     const { expense } = route.params;
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
+    
 
     const updateExpenseStatus = async (newStatus) => {
         try {
@@ -49,6 +50,10 @@ const AdminExpenseDetails = ({ route }) => {
         );
     };
 
+    const handleDownload = () => {
+  navigation.navigate('VoucherPreview', { expense });
+};
+
     const renderButtons = () => {
         switch (expense.status) {
             case 'Pending':
@@ -64,8 +69,8 @@ const AdminExpenseDetails = ({ route }) => {
                 );
             case 'Approved':
                 return (
-                    <TouchableOpacity style={styles.downloadButton} onPress={''}>
-                        <Text style={styles.buttonText}>Download Voucher</Text>
+                    <TouchableOpacity style={styles.downloadButton} onPress={handleDownload}>
+                        <Text style={styles.buttonText}>Voucher</Text>
                     </TouchableOpacity>
                 );
             case 'Rejected':

@@ -18,9 +18,11 @@ import { Authcontext } from '../../context/Authcontext';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
+import { LoaderContext } from '../../context/LoaderContext';
 
 const EditProfile = () => {
   const { user, setUser } = useContext(Authcontext);
+  const { showLoader, hideLoader } = useContext(LoaderContext);
   const app = getApp();
   const db = getDatabase(app);
 
@@ -31,23 +33,32 @@ const EditProfile = () => {
   const [mobile, setMobile] = useState('');
   const [otpVisible, setOtpVisible] = useState(false);
   const [enteredOtp, setEnteredOtp] = useState('');
-  const [pendingUpdate, setPendingUpdate] = useState(null);
+  const [pendingUpdate, setPendingUpdate] = useState(null); 
   const [otpError, setOtpError] = useState('');
 
 
-  useEffect(() => {
-    if (user?.id) {
-      const userRef = ref(db, `/partners/${user.id}`);
-      onValue(userRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          setName(data.name || '');
-          setEmail(data.email || '');
-          setMobile(data.mobile || '');
-        }
-      });
-    }
-  }, [user]);
+    useEffect(() => {
+      if (user?.id) {
+        showLoader(); 
+
+        const userRef = ref(db, `/partners/${user.id}`);
+        const unsubscribe = onValue(userRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            setName(data.name || '');
+            setEmail(data.email || '');
+            setMobile(data.mobile || '');
+          }
+          hideLoader(); 
+        }, (error) => {
+          console.error("Error fetching user:", error);
+          hideLoader(); 
+        });
+
+        return () => unsubscribe();
+      }
+    }, [user]);
+
 
   const handleSave = () => {
     if (!name || !email || !mobile) {
@@ -68,7 +79,6 @@ const EditProfile = () => {
         {
           text: 'Continue',
           onPress: () => {
-            console.log('Sending OTP to:', mobile);
             setPendingUpdate(updatedData);
             setOtpVisible(true); 
           },

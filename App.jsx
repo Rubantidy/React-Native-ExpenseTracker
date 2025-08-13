@@ -11,6 +11,7 @@ import { AuthProvider } from './src/context/Authcontext';
 import RootNavigator from './src/navigation/RootNavigator';
 import { LoaderProvider } from './src/context/LoaderContext';
 import Loader from './src/components/Loader';
+import { PaperProvider } from 'react-native-paper';
 
 function App() { 
 
@@ -50,17 +51,19 @@ function App() {
   );
 }*/
  return (
-    <AuthProvider>
-      <LoaderProvider>
-        <NavigationContainer>
-          <StatusBar barStyle="dark-content" />
-          <Loader /> 
-          <RootNavigator />
-          {/* <AdminNavigator /> */}
-          {/* <PartnerNavigator /> */}
-        </NavigationContainer>
-      </LoaderProvider>
-    </AuthProvider>
+ <PaperProvider>
+      <AuthProvider>
+        <LoaderProvider>
+          <NavigationContainer>
+            <StatusBar barStyle="dark-content" />
+            <Loader />
+            <RootNavigator />
+            {/* <AdminNavigator /> */}
+            {/* <PartnerNavigator /> */}
+          </NavigationContainer>
+        </LoaderProvider>
+      </AuthProvider>
+    </PaperProvider>
   );
 };
 
